@@ -32,9 +32,16 @@ function getGuestSession() {
 
 function getResquestToken() {
     const targetURL = `${BASE_URL}${AUTHENTICATION_PATH}${TOKEN_PATH}?${API_KEY_PARAM}`;
-    return getHTTPClient("GET", targetURL)
+    return get(targetURL)
         .then(res => res.data)
         .catch((error) => {console.error(error.message)});
 }
 
-export {getResquestToken, getGuestSession};
+function createSessionId(request_token){
+    const targetURL = `${BASE_URL}${AUTHENTICATION_PATH}${TOKEN_PATH}?${API_KEY_PARAM}`;
+    return post(targetURL, request_token)
+    .then(res => res.data)
+    .catch((error) => {console.error(error.message)});
+}
+
+export {getResquestToken, getGuestSession, createSessionId};

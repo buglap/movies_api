@@ -9,8 +9,8 @@ const tokenType = new GraphQLObjectType({
     })
 });
 
-const guestAuthType = new GraphQLObjectType({
-    name: 'guestAuth',
+const guestType = new GraphQLObjectType({
+    name: 'guest',
     fields: () => ({
         success: { type: GraphQLBoolean },
         guest_session_id: { type: GraphQLString },
@@ -18,5 +18,12 @@ const guestAuthType = new GraphQLObjectType({
     })
 });
 
+const sessionIdType = new GraphQLObjectType({
+    name: 'guestAuth',
+    fields: () => ({
+        success: { type: GraphQLBoolean },
+        session_id: { type: GraphQLString },
+    })
+});
 
-export {tokenType, guestAuthType};
+export {tokenType, guestType, sessionIdType};

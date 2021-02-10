@@ -1,10 +1,10 @@
 import {getAllPopularTV, getAllTopRatedTV, getTVById, getAllTVReviews} from './src/TV/tv_repo.js';
 import { getAllMovies, getMovieById, getTrendingMovies, searchMovie } from './src/movies/movies_repo.js';
-import {getResquestToken, getGuestSession} from './src/auth/auth_repo.js';
+import {getResquestToken, getGuestSession, createSessionId} from './src/auth/auth_repo.js';
 import {getRatedMovies, getAccount} from './src/account/account_repo.js'
 import {listTvType, tvType,TVReviewsType} from './src/TV/tv.js';
 import {movieListType, searchMovieType, trendingMovieType, movieType } from './src/movies/movies.js';
-import {tokenType, guestAuthType} from './src/auth/auth.js';
+import {tokenType, guestType, sessionIdType} from './src/auth/auth.js';
 import {accountType, ratedMoviesType} from './src/account/account.js'
 import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLList, GraphQLFloat, GraphQLBoolean, GraphQLSchema } from 'graphql';
 
@@ -12,8 +12,8 @@ import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLList, GraphQLFloat
 const RootQueryType = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: ()=>({
-        guestAuth:{
-            type: guestAuthType,
+        guest:{
+            type: guestType,
             description: 'get guest authentication',
             resolve(){
                 return getGuestSession();
@@ -23,7 +23,7 @@ const RootQueryType = new GraphQLObjectType({
             type: tokenType,
             description: 'get request token',
             resolve(){
-                return getAuthToken();
+                return getResquestToken();
             }
         },
         tv: {
@@ -99,9 +99,28 @@ const RootQueryType = new GraphQLObjectType({
     })
 });
 
+const RootMutation = new GraphQLObjectType({
+    name: 'RootMutation',
+    description: 'Functions to create things',
+    fields: () => {
+      return {
+        createSessionId: {
+          type: sessionIdType,
+          args: {
+            request_token: {type: GraphQLString }
+          },
+          resolve(_, args) {
+              return createSessionId(args.request_token);
+          }
+        }
+      }
+    }
+  })
+
 
 const rootSchema = new GraphQLSchema({
-    query: RootQueryType
+    query: RootQueryType,
+    mutation: RootMutation
 });
 
 export default rootSchema ;
